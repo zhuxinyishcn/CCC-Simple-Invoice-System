@@ -90,16 +90,9 @@ public class ReadInvoiceFile {
 				// using the code to determine the product type if it is Licenses
 				if (productHashMap.get(productCode) instanceof Licenses) {
 					// calling the function I made to get the startDate
-					LocalDate startDate = parseDate(productListToken[1]);
-					// calling the function I made to get the endDate
-					LocalDate endDate = parseDate(productListToken[2]);
-					// calculate the effectiveDates
-					long effectiveDates = ChronoUnit.DAYS.between(startDate, endDate);
-					// translate effectiveDates to billingHour (Since it is Lience: using the
-					// effectiveDates/year)
-					double billingHour = effectiveDates / 365.0;
+					double units = parseDateToUnits(productListToken[1],productListToken[2]);
 					// put data to productOrder list
-					ProductOrder item = new ProductOrder(productHashMap.get(productCode), billingHour);
+					ProductOrder item = new ProductOrder(productHashMap.get(productCode), units);
 					productOrders.add(item);
 				} else {
 					// if data are the other two type of data simply put it in to the
@@ -124,11 +117,17 @@ public class ReadInvoiceFile {
 	// This is helping function. It will take a string and translate it to a
 	// LocalDate(YYYY-MM-DD) to help me in the productOrder class for Licenses 's
 	// billing Hours
-	public static LocalDate parseDate(String date) {
+	public static double parseDateToUnits(String start,String end) {
 		// using the correct format
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-M-d");
-		LocalDate localDate = LocalDate.parse(date, dateTimeFormatter);
-		return localDate;
+		LocalDate startDate = LocalDate.parse(start, dateTimeFormatter);
+		LocalDate endDate = LocalDate.parse(end, dateTimeFormatter);
+		// calculate the effectiveDates
+		long effectiveDates = ChronoUnit.DAYS.between(startDate, endDate);
+		// translate effectiveDates to billingHour (Since it is Lience: using the
+		// effectiveDates/year)
+		double units = effectiveDates / 365.0;
+		return units;
 	}
 
 }

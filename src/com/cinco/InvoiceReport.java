@@ -12,18 +12,21 @@ package com.cinco;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.BasicConfigurator;
+
 import invoice.InvoiceData;
 import invoice.ProductOrder;
-import readFile.ReadInvoiceFile;
+import loadMySQLDatabase.LoadInvoiceData;
 
 public class InvoiceReport {
 
 	public static void main(String[] args) {
+		BasicConfigurator.configure();
 		/****
 		 * This part of code is helps me to generate a Executive Summary Report for the
 		 * users
 		 */
-		List<InvoiceData> invoice = ReadInvoiceFile.readInvoiceFileFunction();
+		List<InvoiceData> invoice = LoadInvoiceData.loadInvoiceDataFunction();
 		// call the sort function I made sort data by CustomerByName
 		Collections.sort(invoice, InvoiceData.compareCustomerByName);
 		// build a string to for the future print
@@ -51,7 +54,7 @@ public class InvoiceReport {
 		System.out.print(sb.toString());
 		System.out.printf(
 				"=========================================================================================================================================================================\n");
-		System.out.printf((String.format("%-63s  $%-20.2f $%-20.2f $%-20.2f $%-20.2f $%-20.2f", "TOTAL", finalSubTotal,
+		System.out.printf((String.format("%-62s  $%-20.2f $%-20.2f $%-20.2f $%-20.2f $%-20.2f", "TOTAL", finalSubTotal,
 				finalFees, finalComplianceFee, finalTaxes, finalTotal)));
 		System.out.printf("\n\n");
 		/**

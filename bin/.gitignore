@@ -1,7 +1,4 @@
+/databaseConnect/
+/loadMySQLDatabase/
 /com/
-/customerData/
-/invoice/
-/productData/
 /readFile/
-/writeJson/
-/writeXML/
