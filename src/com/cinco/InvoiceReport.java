@@ -11,7 +11,6 @@ package com.cinco;
 
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.log4j.BasicConfigurator;
 
 import invoice.InvoiceData;

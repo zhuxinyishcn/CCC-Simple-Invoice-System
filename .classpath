@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="lib/xstream-1.4.11.1.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.15.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="lib/InvoiceReport.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
