@@ -56,7 +56,6 @@ public class InvoiceData {
 		}
 		// close all the connection
 		CloseConnection.closeConnectionFunction(conn, ps, rs);
-		// Finally, delete the final table (Address) in database
 		removeAllAddress();
 	}
 
@@ -99,20 +98,6 @@ public class InvoiceData {
 			log.debug("Something wrong when DELETE PersonData info process");
 			throw new RuntimeException(e);
 		}
-//		// get the address id for this person
-//		int addressId = getAddressId(personCode);
-//		// delete the address for this single person
-//		query = "DELETE" + " FROM Address" + " WHERE addressId = ?";
-//		try {
-//			ps = conn.prepareStatement(query);
-//			ps.setInt(1, addressId);
-//			ps.executeUpdate();
-//		} catch (SQLException e) {
-//			// error handing and message for user
-//			log.info("DELETE Address info.....");
-//			log.debug("Something wrong when DELETE Address info this process");
-//			throw new RuntimeException(e);
-//		}
 		// close all the connection
 		CloseConnection.closeConnectionFunction(conn, ps, rs);
 	}
@@ -775,9 +760,9 @@ public class InvoiceData {
 			// check if productCode in database
 			if (rs.next()) {
 				productId = rs.getInt("productId");
+				log.debug("Please double check productCode");
 				// if productCode doesn't in database
 			} else {
-				log.debug("Please double check productCode");
 				log.info("it seems we don't have this product in database");
 			}
 			// error handing and message for user
@@ -824,9 +809,9 @@ public class InvoiceData {
 
 	/**
 	 * This is a helper method to remove an single address record by addressId
-	 * 
+	 *
 	 * @param addressId
-	 * 
+	 *
 	 */
 	public static void removeAddress(int addressId) {
 		// create connection to database
@@ -852,7 +837,7 @@ public class InvoiceData {
 
 	/**
 	 * This is a helper method to remove all address record
-	 * 
+	 *
 	 */
 	public static void removeAllAddress() {
 		// create connection to database

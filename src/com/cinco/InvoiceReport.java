@@ -91,8 +91,9 @@ public class InvoiceReport {
 			System.out.print(newString.toString());
 			System.out.printf(
 					"                                              ========================================================================\n");
-			System.out.printf("%-88s $%-20.2f $%-33.2f\n", "SUB-TOTALS", detailInvoices.getTemporarilyFee(),
-					detailInvoices.getSubTotal());
+			System.out.printf("%-110s $%-40.2f \n", "SUB-TOTALS", detailInvoices.getSubTotal());
+			System.out.printf("%-110s $%-40.2f \n", "ComplianceFee", detailInvoices.getComplianceFee());
+			System.out.printf("%-110s $%-40.2f \n", "FEES", detailInvoices.getTemporarilyFee());
 			System.out.printf("%-110s $%-40.2f \n", "TAXES", detailInvoices.getTaxes());
 			System.out.printf("%-110s $%-40.2f \n", "TOTAL", detailInvoices.getEachTotal());
 			// This part is the end of each piece of data and helps me give enough space for

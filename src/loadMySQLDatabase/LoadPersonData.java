@@ -37,7 +37,7 @@ public class LoadPersonData {
 		 */
 		String query = "SELECT "
 				+ "  p.personCode,  p.firstName,  p.lastName,  a.street,  a.city, a.STATE,  a.zip,  a.country "
-				+ "  FROM Person p   JOIN Address a  ON p.personId = a.addressId";
+				+ "  FROM Person p   JOIN Address a  ON p.addressId = a.addressId";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// create a list to store the Person data
@@ -102,5 +102,4 @@ public class LoadPersonData {
 		CloseConnection.closeConnectionFunction(conn, ps, rs);
 		return person;
 	}
-
 }
