@@ -21,8 +21,7 @@ import org.apache.log4j.Logger;
 import com.cinco.Person;
 
 import customerData.CustomerData;
-import databaseConnect.CloseConnection;
-import databaseConnect.DataConnection;
+import databaseConnect.DataConnector;
 import invoice.InvoiceData;
 import invoice.ProductOrder;
 import productData.Licenses;
@@ -36,22 +35,32 @@ public class LoadInvoiceData {
 	// use the log4j to help me track the error layer
 	public static Logger log = Logger.getLogger(LoadInvoiceData.class);
 
-	public static List<InvoiceData> loadInvoiceDataFunction() {
+	public static List<InvoiceData> loadInvoiceData() {
 		// call the function I made connect to Mysql database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		// create a list for InvoiceData to store all the data
 		List<InvoiceData> invoice = new ArrayList<>();
+		// simply error check before load data
+		if (LoadPersonData.loadPersonData() == null) {
+			log.info("Loading all the Person data");
+			log.debug("Person data might not properly load into database");
+		} else if (LoadCustomerData.loadCustomerData() == null) {
+			log.info("Loading all the Customer data");
+			log.debug("Customer data might not properly load into database");
+		} else if (LoadProductData.loadProductData()==null) {
+			log.info("Loading all the Product data");
+			log.debug("Product data might not properly load into database");
+		}
 		// call function I made put all person object into a hash map for future process
-		HashMap<String, Person> salesPersonHashMap = ReadPersonFile
-				.perosnListToMap(LoadPersonData.loadPersonDataFunction());
+		HashMap<String, Person> salesPersonHashMap = ReadPersonFile.perosnListToMap(LoadPersonData.loadPersonData());
 		// call function I made put all CustomerData object into a hash map for future
 		// process
 		HashMap<String, CustomerData> customerHashMap = ReadCustomerFile
-				.customerListToMap(LoadCustomerData.loadPersonDataFunction());
+				.customerListToMap(LoadCustomerData.loadCustomerData());
 		// call function I made put all ProductData object into a hash map for future
 		// process
 		HashMap<String, ProductData> productHashMap = ReadProductDataFile
-				.productListToMap(LoadProductData.loadProductDataFunction());
+				.productListToMap(LoadProductData.loadProductData());
 		/*
 		 * This part I just get half information of Invoice data (invoiceCode,
 		 * personCode, customerCode) In next part, i will get the productOrder in
@@ -128,7 +137,7 @@ public class LoadInvoiceData {
 			throw new RuntimeException(e);
 		}
 		// call function to close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 		return invoice;
 	}
 

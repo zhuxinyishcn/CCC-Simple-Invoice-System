@@ -25,7 +25,7 @@ public class InvoiceReport {
 		 * This part of code is helps me to generate a Executive Summary Report for the
 		 * users
 		 */
-		List<InvoiceData> invoice = LoadInvoiceData.loadInvoiceDataFunction();
+		List<InvoiceData> invoice = LoadInvoiceData.loadInvoiceData();
 		// call the sort function I made sort data by CustomerByName
 		Collections.sort(invoice, InvoiceData.compareCustomerByName);
 		// build a string to for the future print
@@ -93,8 +93,8 @@ public class InvoiceReport {
 					"                                              ========================================================================\n");
 			System.out.printf("%-110s $%-40.2f \n", "SUB-TOTALS", detailInvoices.getSubTotal());
 			System.out.printf("%-110s $%-40.2f \n", "ComplianceFee", detailInvoices.getComplianceFee());
-			System.out.printf("%-110s $%-40.2f \n", "FEES", detailInvoices.getTemporarilyFee());
 			System.out.printf("%-110s $%-40.2f \n", "TAXES", detailInvoices.getTaxes());
+			System.out.printf("%-110s $%-40.2f \n", "FEES", detailInvoices.getTemporarilyFee());
 			System.out.printf("%-110s $%-40.2f \n", "TOTAL", detailInvoices.getEachTotal());
 			// This part is the end of each piece of data and helps me give enough space for
 			// each data

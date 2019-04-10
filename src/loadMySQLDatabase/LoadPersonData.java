@@ -20,16 +20,15 @@ import org.apache.log4j.Logger;
 import com.cinco.Address;
 import com.cinco.Person;
 
-import databaseConnect.CloseConnection;
-import databaseConnect.DataConnection;
+import databaseConnect.DataConnector;
 
 public class LoadPersonData {
 	// use the log4j to help me track the error layer
 	public static Logger log = Logger.getLogger(LoadPersonData.class);
 
-	public static List<Person> loadPersonDataFunction() {
+	public static List<Person> loadPersonData() {
 		// call the function I made connect to Mysql database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 
 		/*
 		 * This part I will just get the (personCode,personCode, firstName, lastName,
@@ -99,7 +98,7 @@ public class LoadPersonData {
 		}
 
 		// call function to close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 		return person;
 	}
 }

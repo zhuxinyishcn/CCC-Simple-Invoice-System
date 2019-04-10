@@ -20,8 +20,7 @@ import org.apache.log4j.Logger;
 
 import com.cinco.Person;
 
-import databaseConnect.CloseConnection;
-import databaseConnect.DataConnection;
+import databaseConnect.DataConnector;
 import productData.Consultations;
 import productData.Equipment;
 import productData.Licenses;
@@ -32,12 +31,11 @@ public class LoadProductData {
 	// use the log4j to help me track the error layer
 	public static Logger log = Logger.getLogger(LoadProductData.class);
 
-	public static List<ProductData> loadProductDataFunction() {
+	public static List<ProductData> loadProductData() {
 		// call function I made put all person object into a hash map for future process
-		HashMap<String, Person> consultantHashMap = ReadPersonFile
-				.perosnListToMap(LoadPersonData.loadPersonDataFunction());
+		HashMap<String, Person> consultantHashMap = ReadPersonFile.perosnListToMap(LoadPersonData.loadPersonData());
 		// call the function I made connect to Mysql database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		// a query retrieve (productCode, type, name, pricePerUnit, serviceFee
 		// annualLicenseFee, consultantPersonCode , hourlyFee from database
 		String query = "SELECT "
@@ -92,7 +90,7 @@ public class LoadProductData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 		return productData;
 	}
 

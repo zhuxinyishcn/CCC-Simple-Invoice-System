@@ -1,10 +1,9 @@
 /**
  * Author : Xinyi Zhu, Jin Seng Cheng
- * Date : 03/20/2019
+ * Date : 04/9/2019
  *Cinco Computer Consultants (CCC) project
- * 
- * This class helps me to load Person data from database and 
- * put it into a list for future process
+ *
+ * This class helps me to interact with the database
  */
 package com.cinco;
 
@@ -15,8 +14,7 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-import databaseConnect.CloseConnection;
-import databaseConnect.DataConnection;
+import databaseConnect.DataConnector;
 
 /**
  * This is a collection of utility methods that define a general API for
@@ -31,7 +29,7 @@ public class InvoiceData {
 	 * Method that removes every person record from the database
 	 */
 	public static void removeAllPersons() {
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		// retriving all the personCode in the database
 		String query = "SELECT personCode FROM Person";
 		PreparedStatement ps = null;
@@ -55,26 +53,26 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 		removeAllAddress();
 	}
 
 	/**
 	 * Removes the person record from the database corresponding to the provided
 	 * <code>personCode</code>
-	 * 
+	 *
 	 * @param personCode
 	 */
 	public static void removePerson(String personCode) {
 		// delete all the customer data relate to each person
 		removeAllCustomers();
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using the personCode to find the personId(primary key) in database
 		int personId = getPersonId(personCode);
 		// delete each person's email address first
-		String query = "delete from EmailAddress where personId=?";
+		String query = "DELETE FROM EmailAddress WHERE personid = ? ";
 		try {
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, personId);
@@ -87,7 +85,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// delete actual person's info by person Id
-		query = "DELETE" + " FROM Person" + " WHERE personId = ?";
+		query = "DELETE FROM Person WHERE personId = ?";
 		try {
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, personId);
@@ -99,12 +97,12 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
 	 * Method to add a person record to the database with the provided data.
-	 * 
+	 *
 	 * @param personCode
 	 * @param firstName
 	 * @param lastName
@@ -117,7 +115,7 @@ public class InvoiceData {
 	public static void addPerson(String personCode, String firstName, String lastName, String street, String city,
 			String state, String zip, String country) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// call the function I made add address info to database and get the last
@@ -139,19 +137,19 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
 	 * Adds an email record corresponding person record corresponding to the
 	 * provided <code>personCode</code>
-	 * 
+	 *
 	 * @param personCode
 	 * @param email
 	 */
 	public static void addEmail(String personCode, String email) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		// using personCode to get Person Id in database (primary key)
 		int personId = getPersonId(personCode);
 		PreparedStatement ps = null;
@@ -171,7 +169,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -179,11 +177,11 @@ public class InvoiceData {
 	 */
 	public static void removeAllCustomers() {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// get all the customer Id (primary key)in database
-		String query = "select c.customerId from Customer c";
+		String query = "SELECT c.customerid FROM Customer c ";
 		try {
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -201,12 +199,12 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
 	 * Method to add a customer record to the database with the provided data.
-	 * 
+	 *
 	 * @param customerCode
 	 * @param type
 	 * @param primaryContactPersonCode
@@ -220,7 +218,7 @@ public class InvoiceData {
 	public static void addCustomer(String customerCode, String type, String primaryContactPersonCode, String name,
 			String street, String city, String state, String zip, String country) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// add all address info to database and get the last AddressForeignKey
@@ -246,7 +244,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -254,11 +252,11 @@ public class InvoiceData {
 	 */
 	public static void removeAllProducts() {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// retrieve all the productCode from product in database
-		String query = "select  p.productCode from Product p";
+		String query = "SELECT p.productCode FROM Product p";
 		try {
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -275,24 +273,24 @@ public class InvoiceData {
 			log.debug("Something wrong when deleting all major field the Product this process");
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
 	 * Removes a particular product record from the database corresponding to the
 	 * provided <code>productCode</code>
-	 * 
+	 *
 	 * @param assetCode
 	 */
 	public static void removeProduct(String productCode) {
 		// using productCode to find the product Id(primary key) database
 		int productId = getProductId(productCode);
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// delete the ProductOrder data first (children table of product)
-		String query = "delete from ProductOrder where productId=?";
+		String query = "DELETE FROM ProductOrder WHERE productId=?";
 		try {
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, productId);
@@ -305,7 +303,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// delete the Product data second
-		query = "delete from Product where productId=?";
+		query = "DELETE FROM Product WHERE productId=?";
 		try {
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, productId);
@@ -318,7 +316,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -326,7 +324,7 @@ public class InvoiceData {
 	 */
 	public static void addEquipment(String productCode, String name, Double pricePerUnit) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// insert all the major info to database
@@ -346,7 +344,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -354,7 +352,7 @@ public class InvoiceData {
 	 */
 	public static void addLicense(String productCode, String name, double serviceFee, double annualFee) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// insert all the major info to database
@@ -375,7 +373,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -383,7 +381,7 @@ public class InvoiceData {
 	 */
 	public static void addConsultation(String productCode, String name, String consultantPersonCode, Double hourlyFee) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using the consultantPersonCode find the Person Id(primary key) in Person
@@ -408,7 +406,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -416,11 +414,11 @@ public class InvoiceData {
 	 */
 	public static void removeAllInvoices() {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// Retrieving all invoiceCode in database
-		String query = "select invoiceCode from Invoice";
+		String query = "SELECT invoiceCode FROM Invoice";
 		try {
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -438,18 +436,18 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
 	 * Removes the invoice record from the database corresponding to the provided
 	 * <code>invoiceCode</code>
-	 * 
+	 *
 	 * @param invoiceCode
 	 */
 	public static void removeInvoice(String invoiceCode) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using the invoiceCode to retrieving invoice Id in database
@@ -457,7 +455,7 @@ public class InvoiceData {
 		// remove Product table(child table) first
 		removeAllProducts();
 		// delete invoice data by invoice Id(primary key)
-		String query = "delete FROM Invoice WHERE invoiceId = ?";
+		String query = "DELETE FROM Invoice WHERE invoiceId = ?";
 		try {
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, invoiceId);
@@ -470,7 +468,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -478,7 +476,7 @@ public class InvoiceData {
 	 */
 	public static void addInvoice(String invoiceCode, String customerCode, String salesPersonCode) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using salesPersonCode to find the person Id (primary Id) in Person table
@@ -523,7 +521,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -534,11 +532,13 @@ public class InvoiceData {
 	public static void addEquipmentToInvoice(String invoiceCode, String productCode, int numUnits) {
 		/**
 		 * call the addConsultationToInvoice since I use productOrder table to connect
-		 * invoice table and product table which use (product ,and units)
+		 * invoice table and product table which use (productId ,units and its related
+		 * invoice)
+		 *
 		 * addConsultationToInvoice (String invoiceCode, String, productCode, double
-		 * numHours) which can be reuse foe this function since they basic are same
-		 * except to the double to int
-		 * 
+		 * numHours) which can be reuse for this function since they basic do the same
+		 * thing: put (productId ,units and its related invoice) into productOrder table
+		 *
 		 */
 		addConsultationToInvoice(invoiceCode, productCode, numUnits);
 	}
@@ -550,7 +550,7 @@ public class InvoiceData {
 	 */
 	public static void addLicenseToInvoice(String invoiceCode, String productCode, String startDate, String endDate) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using product code to find the productId(primary key)in product table
@@ -575,7 +575,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -585,7 +585,7 @@ public class InvoiceData {
 	 */
 	public static void addConsultationToInvoice(String invoiceCode, String productCode, double numHours) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using product code to find the productId(primary key)in product table
@@ -609,13 +609,13 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
 	 * This is a helper method to add a Address record to the database with the
 	 * provided data.
-	 * 
+	 *
 	 * @param street
 	 * @param city
 	 * @param state
@@ -624,7 +624,7 @@ public class InvoiceData {
 	 */
 	public static int addAddress(String street, String city, String state, String zip, String country) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String query = "INSERT INTO Address (street, city, STATE, zip, country) VALUES (?, ?, ?, ?, ?)";
@@ -649,7 +649,7 @@ public class InvoiceData {
 			throw new RuntimeException(sqle);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 		// return the last address foreignKey
 		return foreignKeyId;
 	}
@@ -657,13 +657,13 @@ public class InvoiceData {
 	/**
 	 * This is a helper method to get a PersonId record to the database with the
 	 * provided data.
-	 * 
+	 *
 	 * @param personCode
-	 * 
+	 *
 	 */
 	public static int getPersonId(String personCode) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using the personCode to find the person Id(primary key) in person Table
@@ -691,20 +691,20 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 		return personId;
 	}
 
 	/**
 	 * This is a helper method to get a invoiceId record to the database with the
 	 * provided data.
-	 * 
+	 *
 	 * @param invoiceCode
-	 * 
+	 *
 	 */
 	public static int getInvoiceId(String invoiceCode) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using the invoiceCode to find the invoice Id(primary key) in invoice Table
@@ -732,20 +732,20 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 		return invoiceId;
 	}
 
 	/**
 	 * This is a helper method to get a productId record to the database with the
 	 * provided data.
-	 * 
+	 *
 	 * @param productCode
-	 * 
+	 *
 	 */
 	public static int getProductId(String productCode) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using the productCode to find the product Id(primary key) in product Table
@@ -773,25 +773,25 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 		return productId;
 	}
 
 	/**
 	 * This is a helper method to remove a customer record by customerId
-	 * 
+	 *
 	 * @param customerId
-	 * 
+	 *
 	 */
 	public static void removeCustomers(int customerId) {
 		// clear the relate invoice data info first
 		removeAllInvoices();
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using the customerId(primary key) in table to delete customer info
-		String query = "delete from Customer where customerId=?";
+		String query = "DELETE FROM Customer WHERE customerId=?";
 		try {
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, customerId);
@@ -804,7 +804,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -815,11 +815,11 @@ public class InvoiceData {
 	 */
 	public static void removeAddress(int addressId) {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// using the addressId(primary key) in table to delete address info
-		String query = "delete from Address where addressId=?";
+		String query = "DELETE FROM Address WHERE addressId=?";
 		try {
 			ps = conn.prepareStatement(query);
 			ps.setInt(1, addressId);
@@ -832,7 +832,7 @@ public class InvoiceData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 
 	/**
@@ -841,11 +841,11 @@ public class InvoiceData {
 	 */
 	public static void removeAllAddress() {
 		// create connection to database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		// retrieve all the addressId from product in database
-		String query = "select addressId from Address";
+		String query = "SELECT addressId FROM Address";
 		try {
 			ps = conn.prepareStatement(query);
 			rs = ps.executeQuery();
@@ -862,6 +862,6 @@ public class InvoiceData {
 			log.debug("Something wrong when deleting all major field the address info this process");
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 	}
 }

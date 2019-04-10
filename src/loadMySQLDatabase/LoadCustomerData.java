@@ -24,20 +24,19 @@ import com.cinco.Person;
 import customerData.Corporate;
 import customerData.CustomerData;
 import customerData.Government;
-import databaseConnect.CloseConnection;
-import databaseConnect.DataConnection;
+import databaseConnect.DataConnector;
 import readFile.ReadPersonFile;
 
 public class LoadCustomerData {
 	// use the log4j to help me track the error layer
 	public static Logger log = Logger.getLogger(LoadCustomerData.class);
 
-	public static List<CustomerData> loadPersonDataFunction() {
+	public static List<CustomerData> loadCustomerData() {
 		// call function I made put all person object into a hash map for future process
 		HashMap<String, Person> primaryContactInfoHashMap = ReadPersonFile
-				.perosnListToMap(LoadPersonData.loadPersonDataFunction());
+				.perosnListToMap(LoadPersonData.loadPersonData());
 		// call the function I made connect to Mysql database
-		Connection conn = DataConnection.dataConnectionFunction();
+		Connection conn = DataConnector.dataConnectionFunction();
 		// a query retrieve (customerCode, type, primaryContact, fullName, address and
 		// primaryContactInfo) from database
 		String query = "SELECT "
@@ -86,7 +85,7 @@ public class LoadCustomerData {
 			throw new RuntimeException(e);
 		}
 		// close all the connection
-		CloseConnection.closeConnectionFunction(conn, ps, rs);
+		DataConnector.closeConnection(conn, ps, rs);
 		return customer;
 	}
 
