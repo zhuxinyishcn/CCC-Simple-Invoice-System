@@ -9,4 +9,4 @@ Phone: 4024707885
 Email: jinsengcheng@gmail.com
 
 
-Detail see here: https://github.com/zhuxinyishcn/CSCE156-Java-Semester-Project/blob/master/designDocument-v6.0.pdf :)
+Detail see here [here](https://www.google.com)
