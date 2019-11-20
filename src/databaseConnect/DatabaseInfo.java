@@ -10,8 +10,8 @@ package databaseConnect;
 
 public final class DatabaseInfo {
 
-	public static final String url = "jdbc:mysql://cse.unl.edu/jcheng?useUnicode=true&useJDBCCompliantTimezoneShift="
+	public static final String url = "jdbc:mysql://cse.unl.edu/xzhu?useUnicode=true&useJDBCCompliantTimezoneShift="
 			+ "true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-	public static final String username = "jcheng";
-	public static final String password = "BfLR9p";
+	public static final String username = "xzhu";
+	public static final String password = "1234";
 }

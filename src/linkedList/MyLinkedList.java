@@ -122,7 +122,7 @@ public class MyLinkedList<T> implements Iterable<T> {
 	 * @param item index
 	 * @return
 	 */
-	public void insertAtIndex(T item, int index) {
+	private void insertAtIndex(T item, int index) {
 		// error check for users if put node out of bound
 		if (index > this.size || index < 0) {
 			System.out.println("index out of bounds");

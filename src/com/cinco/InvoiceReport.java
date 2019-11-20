@@ -25,9 +25,9 @@ public class InvoiceReport {
 		 * This part of code is helps me to generate a Executive Summary Report for the
 		 * users
 		 */
-		List<InvoiceData> invoice = LoadInvoiceData.loadInvoiceData();
+		List<InvoiceData> invoices = LoadInvoiceData.loadInvoiceData();
 		// call the sort function I made sort data by CustomerByName
-		Collections.sort(invoice, InvoiceData.compareCustomerByName);
+		Collections.sort(invoices, InvoiceData.compareCustomerByName);
 		// build a string to for the future print
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("%-8s %-34s %-20s %-20s %-20s %-23s %-22s %-20s\n", "Invoice", "Customer",
@@ -37,7 +37,7 @@ public class InvoiceReport {
 		System.out.println("=========================");
 		// for each invoice data calling the function a made to get the each type of
 		// money amount
-		for (InvoiceData invocies : invoice) {
+		for (InvoiceData invocies : invoices) {
 			// format their information
 			sb.append((String.format("%-8s %-33s %-20s $%-20.2f $%-20.2f $%-20.2f $%-20.2f $%-20.2f\n",
 					invocies.getInvoiceCode(), invocies.getCustomer().getName(), invocies.getSalesPerson().getName(),
@@ -62,15 +62,15 @@ public class InvoiceReport {
 		 */
 		System.out.printf("Individual Invoice Detail Reports\n");
 		System.out.printf("==================================================\n");
-		for (InvoiceData detailInvoices : invoice) {
-			System.out.println(detailInvoices.getInvoiceCode());
+		for (InvoiceData detailInvoice : invoices) {
+			System.out.println(detailInvoice.getInvoiceCode());
 			System.out.println("========================");
-			System.out.println("Salesperson: " + detailInvoices.getSalesPerson().getName());
+			System.out.println("Salesperson: " + detailInvoice.getSalesPerson().getName());
 			System.out.println("Customer Info: ");
-			System.out.printf("%-5s (%-3s)\n", detailInvoices.getCustomer().getName(),
-					detailInvoices.getCustomer().getCustomerCode());
-			System.out.printf("%-5s\n", detailInvoices.getCustomer().getPrimaryContactInfo().getName());
-			System.out.println(detailInvoices.getCustomer().getAddress());
+			System.out.printf("%-5s (%-3s)\n", detailInvoice.getCustomer().getName(),
+					detailInvoice.getCustomer().getCustomerCode());
+			System.out.printf("%-5s\n", detailInvoice.getCustomer().getPrimaryContactInfo().getName());
+			System.out.println(detailInvoice.getCustomer().getAddress());
 			System.out.printf("-------------------------------------------\n");
 			StringBuilder newString = new StringBuilder();
 			newString.append(
@@ -81,7 +81,7 @@ public class InvoiceReport {
 			 * SericeFee and getSubSubTotal
 			 **/
 
-			for (ProductOrder productOrderInfo : detailInvoices.getProductOrders()) {
+			for (ProductOrder productOrderInfo : detailInvoice.getProductOrders()) {
 				newString.append(String.format("%-10s %-36s %-40s $%-20.2f $%-20.2f\n",
 						productOrderInfo.getProductData().getCode(), productOrderInfo.getProductData().getName(),
 						productOrderInfo.getUsage(), productOrderInfo.getSericeFee(),
@@ -91,11 +91,11 @@ public class InvoiceReport {
 			System.out.print(newString.toString());
 			System.out.printf(
 					"                                              ========================================================================\n");
-			System.out.printf("%-110s $%-40.2f \n", "SUB-TOTALS", detailInvoices.getSubTotal());
-			System.out.printf("%-110s $%-40.2f \n", "ComplianceFee", detailInvoices.getComplianceFee());
-			System.out.printf("%-110s $%-40.2f \n", "TAXES", detailInvoices.getTaxes());
-			System.out.printf("%-110s $%-40.2f \n", "FEES", detailInvoices.getTemporarilyFee());
-			System.out.printf("%-110s $%-40.2f \n", "TOTAL", detailInvoices.getEachTotal());
+			System.out.printf("%-110s $%-40.2f \n", "SUB-TOTALS", detailInvoice.getSubTotal());
+			System.out.printf("%-110s $%-40.2f \n", "ComplianceFee", detailInvoice.getComplianceFee());
+			System.out.printf("%-110s $%-40.2f \n", "TAXES", detailInvoice.getTaxes());
+			System.out.printf("%-110s $%-40.2f \n", "FEES", detailInvoice.getTemporarilyFee());
+			System.out.printf("%-110s $%-40.2f \n", "TOTAL", detailInvoice.getEachTotal());
 			// This part is the end of each piece of data and helps me give enough space for
 			// each data
 			System.out.printf("\n\n");
