@@ -15,3 +15,4 @@ The Invoice class uses the composition design principle which contains Person cl
 The database schema of the application is shown in the ER Diagram presented below. This data integrity is maintained by creating a constraint key that conceptually should not have duplicates data in invoices and product tables. This helps users prevent duplicate data in their database.Each of the major data types including Invoice, Product, Customer, and Person are stored in the tables created. Person, Customer, and Invoice are joined to ProductOrder through the foreign key for each invoice associated with those tables. Specialized tables such as Address, email address, and Product, are 
 7used to store the specific information for each major table in order to further normalize the database schema. Details of the database schema are shown below.  
 ![](./.github/img/ER_Diagram.png "ER_Diagram.png")
+##Preview
